@@ -22,8 +22,8 @@ test('Terminal → A2A → MAS → MCP Streamable HTTP, persistencia y errores',
     A2A_URL: `http://127.0.0.1:${a2aPort}`, APPOINTMENTS_FILE: join(dir, 'citas.json') };
   let logs = '';
   const children = [];
-  const start = file => {
-    const child = spawn(process.execPath, [file], { env, stdio: ['ignore', 'pipe', 'pipe'] });
+  const start = (file, args = []) => {
+    const child = spawn(process.execPath, [file, ...args], { env, stdio: ['ignore', 'pipe', 'pipe'] });
     children.push(child);
     child.stdout.on('data', b => { logs += b; });
     child.stderr.on('data', b => { logs += b; });
@@ -49,6 +49,26 @@ test('Terminal → A2A → MAS → MCP Streamable HTTP, persistencia y errores',
   let mcp = start('src/mcp-server.js');
   start('src/a2a-server.js');
   await Promise.all([ready(`http://127.0.0.1:${mcpPort}/health`), ready(`${env.A2A_URL}/health`)]);
+  // La validación Origin debe preceder al parser y aplicarse también a GET.
+  for (const origin of ['https://untrusted.example', 'null', `http://127.0.0.1:${mcpPort}.untrusted.example`]) {
+    for (const method of ['GET', 'POST']) {
+      const response = await fetch(env.MCP_URL, { method, headers: { Origin: origin } });
+      assert.equal(response.status, 403);
+    }
+  }
+  const trusted = new Client({ name: 'trusted-origin-test', version: '1' });
+  try {
+    await trusted.connect(new StreamableHTTPClientTransport(new URL(env.MCP_URL), {
+      requestInit: { headers: { Origin: `http://localhost:${mcpPort}` } },
+    }));
+    assert.equal((await trusted.listTools()).tools.length, 3);
+  } finally { await trusted.close(); }
+  const cli = start('src/cli.js', ['/faq costo']);
+  let cliOutput = '';
+  cli.stdout.on('data', b => { cliOutput += b; });
+  assert.equal((await once(cli, 'exit'))[0], 0);
+  assert.match(cliOutput, /Q250/);
+  assert.match(cliOutput, /task=.*context=/);
   const discovery = await fetch(`${env.A2A_URL}/.well-known/agent-card.json`);
   const card = await discovery.json();
   assert.equal(card.skills.length, 3);

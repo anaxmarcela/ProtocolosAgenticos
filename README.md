@@ -93,6 +93,8 @@ Para volver a Gemini, termina el servidor, ejecuta `Remove-Item Env:AGENT_MODE` 
 
 La terminal solo importa el cliente A2A. Los agentes descubren las herramientas mediante `listTools` y las invocan mediante `callTool`; no importan las implementaciones de negocio. MCP publica además un prompt y un recurso que se pueden inspeccionar, aunque los agentes usan instrucciones propias.
 
+El endpoint MCP valida `Origin`: admite el origen de `MCP_URL`, `localhost` y `127.0.0.1` en su puerto; rechaza otros orígenes con HTTP 403. El cliente de terminal puede conectarse sin ese encabezado, de acuerdo con la [especificación de Streamable HTTP](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports).
+
 ## Endpoints y pruebas
 
 - MCP: `http://127.0.0.1:3001/mcp`
@@ -104,7 +106,7 @@ La terminal solo importa el cliente A2A. Los agentes descubren las herramientas 
 npm test
 ```
 
-La prueba inicia procesos reales en puertos 13000/13001 y una base temporal. Verifica descubrimiento, las tres herramientas, prompts, recursos, tareas consultables, streaming, colisiones de horario, fechas inválidas, fines de semana, horario, argumentos incompletos, persistencia y falla de MCP. También verifica el ciclo coordinador → especialista FAQ → MCP usando respuestas controladas del modelo. No consume API ni modifica las citas de la demostración; las llamadas reales a Gemini requieren una clave y una comprobación adicional.
+La prueba inicia procesos reales en puertos 13000/13001 y una base temporal. Verifica la CLI, validación de Origin, descubrimiento, las tres herramientas, prompts, recursos, tareas consultables, streaming, colisiones de horario, fechas inválidas, fines de semana, horario, argumentos incompletos, persistencia y falla de MCP. También verifica el ciclo coordinador → especialista FAQ → MCP usando respuestas controladas del modelo. No consume API ni modifica las citas de la demostración; las llamadas reales a Gemini requieren una clave y una comprobación adicional.
 
 Las evaluaciones de la hoja 6 se conservan en `promptfooconfig.yaml`, adaptando `provider.js` para usar A2A y sus metadatos. Para ejecutarlas instala opcionalmente `npm install --save-dev promptfoo@0.123.1`, arranca ambos servidores **en modo Gemini**, configura también las credenciales del evaluador de promptfoo y ejecuta `npm run eval`. No se incluyen reportes antiguos como evidencia de esta implementación.
 

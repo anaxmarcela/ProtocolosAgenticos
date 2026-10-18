@@ -38,6 +38,21 @@ function createServer() {
   return server;
 }
 const app = express();
+// Streamable HTTP exige rechazar Origin ajenos incluso en un servidor local.
+// La CLI no envía Origin; los clientes del origen MCP configurado sí se admiten.
+const allowedOrigins = new Set([
+  new URL(config.mcpUrl).origin,
+  `http://127.0.0.1:${config.mcpPort}`,
+  `http://localhost:${config.mcpPort}`,
+]);
+app.use('/mcp', (req, res, next) => {
+  const origin = req.get('Origin');
+  if (origin !== undefined && !allowedOrigins.has(origin)) {
+    log('MCP', 'request.rejected', { reason: 'invalid_origin' });
+    return res.status(403).json({ error: 'Origin no permitido.' });
+  }
+  next();
+});
 app.use(express.json({ limit: '100kb' }));
 app.get('/health', (_req, res) => res.json({ ok: true, transport: 'streamable-http' }));
 app.post('/mcp', async (req, res) => {
