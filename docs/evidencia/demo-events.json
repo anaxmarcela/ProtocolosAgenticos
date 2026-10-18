@@ -1,0 +1,192 @@
+[
+  {
+    "time": 0.001,
+    "panel": "MCP",
+    "text": "$ node src/mcp-server.js\n"
+  },
+  {
+    "time": 0.013,
+    "panel": "A2A",
+    "text": "$ node src/a2a-server.js\n"
+  },
+  {
+    "time": 0.476,
+    "panel": "MCP",
+    "text": "{\"time\":\"2026-10-18T02:58:55.480Z\",\"component\":\"MCP\",\"event\":\"listening\",\"port\":14001,\"transport\":\"streamable-http\"}\n"
+  },
+  {
+    "time": 0.638,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:55.643Z\",\"component\":\"A2A\",\"event\":\"listening\",\"url\":\"http://127.0.0.1:14000\",\"mode\":\"demo\"}\n"
+  },
+  {
+    "time": 0.742,
+    "panel": "CLIENTE",
+    "text": "Agent Card: Parachute S.A.; skills: preguntas_frecuentes, agendar_cita, consultar_cita\n"
+  },
+  {
+    "time": 0.742,
+    "panel": "CLIENTE",
+    "text": "$ node src/cli.js /faq ¿Cuánto cuesta la consulta?\n"
+  },
+  {
+    "time": 0.936,
+    "panel": "CLIENTE",
+    "text": "Conectado a Parachute S.A. mediante A2A. /salir termina; /nuevo reinicia la conversación.\n"
+  },
+  {
+    "time": 0.955,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:55.962Z\",\"component\":\"A2A\",\"event\":\"task.status\",\"taskId\":\"be3f313a-bc3b-479c-8aa4-cc48c24bd21d\",\"contextId\":\"8ae58bbd-486c-469d-b5f1-a79b21453c3d\",\"state\":\"TASK_STATE_WORKING\"}\n"
+  },
+  {
+    "time": 1.057,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:56.064Z\",\"component\":\"MAS\",\"event\":\"delegate\",\"agent\":\"faq-demo\",\"traceId\":\"be3f313a-bc3b-479c-8aa4-cc48c24bd21d\"}\n"
+  },
+  {
+    "time": 1.068,
+    "panel": "MCP",
+    "text": "{\"time\":\"2026-10-18T02:58:56.075Z\",\"component\":\"MCP\",\"event\":\"tool.start\",\"tool\":\"buscar_faq\"}\n"
+  },
+  {
+    "time": 1.069,
+    "panel": "MCP",
+    "text": "{\"time\":\"2026-10-18T02:58:56.076Z\",\"component\":\"MCP\",\"event\":\"tool.end\",\"tool\":\"buscar_faq\",\"durationMs\":1,\"success\":true}\n"
+  },
+  {
+    "time": 1.075,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:56.082Z\",\"component\":\"A2A\",\"event\":\"task.status\",\"taskId\":\"be3f313a-bc3b-479c-8aa4-cc48c24bd21d\",\"contextId\":\"8ae58bbd-486c-469d-b5f1-a79b21453c3d\",\"state\":\"TASK_STATE_COMPLETED\"}\n"
+  },
+  {
+    "time": 1.081,
+    "panel": "CLIENTE",
+    "text": "Parachute: El costo de la consulta es de Q250 por sesión.\n[task=be3f313a-bc3b-479c-8aa4-cc48c24bd21d context=8ae58bbd-486c-469d-b5f1-a79b21453c3d]\n"
+  },
+  {
+    "time": 1.662,
+    "panel": "CLIENTE",
+    "text": "$ node src/cli.js /agendar {\"nombre\":\"Ana Prueba\",\"fecha\":\"2026-11-02\",\"hora\":\"10:00\",\"correo\":\"ana@example.com\"}\n"
+  },
+  {
+    "time": 1.848,
+    "panel": "CLIENTE",
+    "text": "Conectado a Parachute S.A. mediante A2A. /salir termina; /nuevo reinicia la conversación.\n"
+  },
+  {
+    "time": 1.856,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:56.863Z\",\"component\":\"A2A\",\"event\":\"task.status\",\"taskId\":\"e2282c71-a761-4f47-8110-3b2144e9adf0\",\"contextId\":\"ccf3997b-532b-4ce4-b012-7fd8454fa375\",\"state\":\"TASK_STATE_WORKING\"}\n"
+  },
+  {
+    "time": 1.866,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:56.873Z\",\"component\":\"MAS\",\"event\":\"delegate\",\"agent\":\"citas-demo\",\"traceId\":\"e2282c71-a761-4f47-8110-3b2144e9adf0\"}\n"
+  },
+  {
+    "time": 1.87,
+    "panel": "MCP",
+    "text": "{\"time\":\"2026-10-18T02:58:56.877Z\",\"component\":\"MCP\",\"event\":\"tool.start\",\"tool\":\"agendar_cita\"}\n"
+  },
+  {
+    "time": 1.872,
+    "panel": "MCP",
+    "text": "{\"time\":\"2026-10-18T02:58:56.879Z\",\"component\":\"MCP\",\"event\":\"tool.end\",\"tool\":\"agendar_cita\",\"durationMs\":2,\"success\":true}\n"
+  },
+  {
+    "time": 1.875,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:56.882Z\",\"component\":\"A2A\",\"event\":\"task.status\",\"taskId\":\"e2282c71-a761-4f47-8110-3b2144e9adf0\",\"contextId\":\"ccf3997b-532b-4ce4-b012-7fd8454fa375\",\"state\":\"TASK_STATE_COMPLETED\"}\n"
+  },
+  {
+    "time": 1.877,
+    "panel": "CLIENTE",
+    "text": "Parachute: {\"exito\":true,\"id_cita\":\"APT_0001\",\"nombre\":\"Ana Prueba\",\"fecha\":\"2026-11-02\",\"hora\":\"10:00\",\"correo\":\"ana@example.com\"}\n[task=e2282c71-a761-4f47-8110-3b2144e9adf0 context=ccf3997b-532b-4ce4-b012-7fd8454fa375]\n"
+  },
+  {
+    "time": 2.444,
+    "panel": "CLIENTE",
+    "text": "$ node src/cli.js /consultar APT_0001\n"
+  },
+  {
+    "time": 2.626,
+    "panel": "CLIENTE",
+    "text": "Conectado a Parachute S.A. mediante A2A. /salir termina; /nuevo reinicia la conversación.\n"
+  },
+  {
+    "time": 2.635,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:57.642Z\",\"component\":\"A2A\",\"event\":\"task.status\",\"taskId\":\"81b09d16-009f-4ff5-9d33-913d84e2adda\",\"contextId\":\"684422b7-c920-4e2f-b3d1-9c9f9c1cdf18\",\"state\":\"TASK_STATE_WORKING\"}\n"
+  },
+  {
+    "time": 2.644,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:57.651Z\",\"component\":\"MAS\",\"event\":\"delegate\",\"agent\":\"citas-demo\",\"traceId\":\"81b09d16-009f-4ff5-9d33-913d84e2adda\"}\n"
+  },
+  {
+    "time": 2.648,
+    "panel": "MCP",
+    "text": "{\"time\":\"2026-10-18T02:58:57.655Z\",\"component\":\"MCP\",\"event\":\"tool.start\",\"tool\":\"consultar_cita\"}\n"
+  },
+  {
+    "time": 2.648,
+    "panel": "MCP",
+    "text": "{\"time\":\"2026-10-18T02:58:57.655Z\",\"component\":\"MCP\",\"event\":\"tool.end\",\"tool\":\"consultar_cita\",\"durationMs\":0,\"success\":true}\n"
+  },
+  {
+    "time": 2.65,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:57.657Z\",\"component\":\"A2A\",\"event\":\"task.status\",\"taskId\":\"81b09d16-009f-4ff5-9d33-913d84e2adda\",\"contextId\":\"684422b7-c920-4e2f-b3d1-9c9f9c1cdf18\",\"state\":\"TASK_STATE_COMPLETED\"}\n"
+  },
+  {
+    "time": 2.653,
+    "panel": "CLIENTE",
+    "text": "Parachute: {\"exito\":true,\"id_cita\":\"APT_0001\",\"nombre\":\"Ana Prueba\",\"fecha\":\"2026-11-02\",\"hora\":\"10:00\",\"correo\":\"ana@example.com\"}\n[task=81b09d16-009f-4ff5-9d33-913d84e2adda context=684422b7-c920-4e2f-b3d1-9c9f9c1cdf18]\n"
+  },
+  {
+    "time": 3.208,
+    "panel": "CLIENTE",
+    "text": "$ node src/cli.js /agendar {\"nombre\":\"Ana Prueba\",\"fecha\":\"2026-11-02\",\"hora\":\"10:00\",\"correo\":\"ana@example.com\"}\n"
+  },
+  {
+    "time": 3.387,
+    "panel": "CLIENTE",
+    "text": "Conectado a Parachute S.A. mediante A2A. /salir termina; /nuevo reinicia la conversación.\n"
+  },
+  {
+    "time": 3.394,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:58.401Z\",\"component\":\"A2A\",\"event\":\"task.status\",\"taskId\":\"6a71a45d-8140-459f-a398-1693e5b622fd\",\"contextId\":\"4969073f-c64b-4a54-bd47-a3311bc25056\",\"state\":\"TASK_STATE_WORKING\"}\n"
+  },
+  {
+    "time": 3.402,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:58.409Z\",\"component\":\"MAS\",\"event\":\"delegate\",\"agent\":\"citas-demo\",\"traceId\":\"6a71a45d-8140-459f-a398-1693e5b622fd\"}\n"
+  },
+  {
+    "time": 3.404,
+    "panel": "MCP",
+    "text": "{\"time\":\"2026-10-18T02:58:58.411Z\",\"component\":\"MCP\",\"event\":\"tool.start\",\"tool\":\"agendar_cita\"}\n"
+  },
+  {
+    "time": 3.404,
+    "panel": "MCP",
+    "text": "{\"time\":\"2026-10-18T02:58:58.411Z\",\"component\":\"MCP\",\"event\":\"tool.end\",\"tool\":\"agendar_cita\",\"durationMs\":0,\"success\":false}\n"
+  },
+  {
+    "time": 3.406,
+    "panel": "A2A",
+    "text": "{\"time\":\"2026-10-18T02:58:58.413Z\",\"component\":\"A2A\",\"event\":\"task.status\",\"taskId\":\"6a71a45d-8140-459f-a398-1693e5b622fd\",\"contextId\":\"4969073f-c64b-4a54-bd47-a3311bc25056\",\"state\":\"TASK_STATE_COMPLETED\"}\n"
+  },
+  {
+    "time": 3.408,
+    "panel": "CLIENTE",
+    "text": "Parachute: {\"exito\":false,\"error\":\"Ese horario ya está ocupado.\"}\n[task=6a71a45d-8140-459f-a398-1693e5b622fd context=4969073f-c64b-4a54-bd47-a3311bc25056]\n"
+  },
+  {
+    "time": 3.977,
+    "panel": "CLIENTE",
+    "text": "FIN: FAQ, reserva, consulta y rechazo de horario ocupado comprobados por A2A y MCP.\n"
+  }
+]

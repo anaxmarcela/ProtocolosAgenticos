@@ -1,0 +1,30 @@
+{
+  "name": "parachute-protocolos-agenticos",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Hoja 7 CC3116: Parachute S.A. con MCP Streamable HTTP y A2A",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "mcp": "node src/mcp-server.js",
+    "a2a": "node src/a2a-server.js",
+    "client": "node src/cli.js",
+    "agente": "node src/cli.js",
+    "test": "node --test --test-concurrency=1",
+    "record:demo": "node scripts/record-demo.js",
+    "eval": "promptfoo eval --no-cache -j 1 --delay 4000"
+  },
+  "dependencies": {
+    "@a2a-js/sdk": "1.3.0",
+    "@google/genai": "2.27.0",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "dotenv": "16.6.1",
+    "express": "5.1.0",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0"
+  }
+}

@@ -1,0 +1,163 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: Evals del agente de Parachute S.A. (citas y preguntas frecuentes)
+
+prompts:
+  - "{{mensaje}}"
+
+providers:
+  - id: file://provider.js
+    label: agente-parachute
+
+defaultTest:
+  options:
+    provider: google:gemini-flash-lite-latest
+
+tests:
+  # ---------- Preguntas frecuentes ----------
+  - description: "FAQ | Horario de atención"
+    vars:
+      mensaje: "¿Cuál es el horario de atención?"
+    assert:
+      - type: factuality
+        value: "Atienden de lunes a viernes de 9:00 a 18:00."
+      - type: regex
+        value: "9(:00)?\\s*(a\\.?\\s*m\\.?|am|hrs?)?\\s*(a|-|hasta)\\s*(18(:00)?|6(:00)?\\s*(p\\.?\\s*m\\.?|pm))"
+      - type: javascript
+        value: "(context.providerResponse?.metadata?.herramientas || []).some(h => h.nombre === 'buscar_faq')"
+      - type: latency
+        threshold: 10000
+
+  - description: "FAQ | Costo de la consulta"
+    vars:
+      mensaje: "¿Cuánto cuesta una consulta?"
+    assert:
+      - type: factuality
+        value: "La consulta cuesta Q250 por sesión."
+      - type: contains
+        value: "Q250"
+      - type: javascript
+        value: "(context.providerResponse?.metadata?.herramientas || []).some(h => h.nombre === 'buscar_faq')"
+      - type: latency
+        threshold: 10000
+
+  - description: "FAQ | Consultas virtuales"
+    vars:
+      mensaje: "¿Puedo tener la consulta por videollamada?"
+    assert:
+      - type: factuality
+        value: "Sí, ofrecen consultas virtuales por videollamada además de presenciales."
+      - type: javascript
+        value: "(context.providerResponse?.metadata?.herramientas || []).some(h => h.nombre === 'buscar_faq')"
+
+  - description: "FAQ | Política de cancelación"
+    vars:
+      mensaje: "Si cancelo mi cita, ¿me cobran algo?"
+    assert:
+      - type: factuality
+        value: "Cancelar con al menos 24 horas de anticipación no tiene costo; con menos tiempo hay un cargo de Q100."
+      - type: contains-all
+        value: ["24 horas", "Q100"]
+      - type: javascript
+        value: "(context.providerResponse?.metadata?.herramientas || []).some(h => h.nombre === 'buscar_faq')"
+
+  - description: "FAQ | Ubicación"
+    vars:
+      mensaje: "¿Dónde quedan sus oficinas?"
+    assert:
+      - type: factuality
+        value: "Están en 5a. Avenida 10-50, Zona 10, Ciudad de Guatemala."
+      - type: icontains
+        value: "zona 10"
+      - type: latency
+        threshold: 10000
+
+  - description: "FAQ | Pregunta fuera de la base (no debe inventar)"
+    vars:
+      mensaje: "¿Cómo se llama el gerente general de la empresa?"
+    assert:
+      - type: icontains
+        value: "No cuento con esa información"
+      - type: javascript
+        value: "(context.providerResponse?.metadata?.herramientas || []).some(h => h.nombre === 'buscar_faq')"
+      - type: javascript
+        value: "!(context.providerResponse?.metadata?.herramientas || []).some(h => h.nombre === 'agendar_cita')"
+
+  # ---------- Agendar citas ----------
+  - description: "Cita | Datos completos"
+    vars:
+      mensaje: "Quiero agendar una cita el 2026-11-16 a las 14:30. Me llamo Carlos García y mi correo es carlos@example.com"
+    assert:
+      - type: regex
+        value: "APT_\\d{4}"
+      - type: javascript
+        value: |
+          const h = (context.providerResponse?.metadata?.herramientas || []).filter(t => t.nombre === 'agendar_cita');
+          if (h.length !== 1) return { pass: false, score: 0, reason: `Se esperaba 1 llamada a agendar_cita y hubo ${h.length}` };
+          const a = h[0].argumentos;
+          const ok = a.fecha === '2026-11-16' && a.hora === '14:30' && a.correo === 'carlos@example.com' && /carlos garc[ií]a/i.test(a.nombre);
+          return { pass: ok, score: ok ? 1 : 0, reason: `Argumentos: ${JSON.stringify(a)}` };
+      - type: javascript
+        value: "(context.providerResponse?.metadata?.herramientas || []).some(h => h.nombre === 'agendar_cita' && h.resultado.exito)"
+      - type: latency
+        threshold: 15000
+
+  - description: "Cita | Fecha y hora en lenguaje natural"
+    vars:
+      mensaje: "Agéndame para el miércoles 18 de noviembre de 2026 a las 10 de la mañana. Soy María López, maria@example.com"
+    assert:
+      - type: regex
+        value: "APT_\\d{4}"
+      - type: javascript
+        value: |
+          const h = (context.providerResponse?.metadata?.herramientas || []).find(t => t.nombre === 'agendar_cita');
+          if (!h) return { pass: false, score: 0, reason: 'No se llamó agendar_cita' };
+          const ok = h.argumentos.fecha === '2026-11-18' && h.argumentos.hora === '10:00';
+          return { pass: ok, score: ok ? 1 : 0, reason: `fecha=${h.argumentos.fecha} hora=${h.argumentos.hora}` };
+      - type: latency
+        threshold: 15000
+
+  - description: "Cita | Falta el correo (no debe agendar)"
+    vars:
+      mensaje: "Quiero una cita el 2026-11-20 a las 11:00, me llamo Pedro Ruiz"
+    assert:
+      - type: not-regex
+        value: "APT_\\d{4}"
+      - type: regex
+        value: "[Cc]orreo|[Ee]-?mail"
+      - type: javascript
+        value: "!(context.providerResponse?.metadata?.herramientas || []).some(h => h.nombre === 'agendar_cita')"
+
+  - description: "Cita | Sábado (fuera de días hábiles)"
+    vars:
+      mensaje: "Agenda una cita el 2026-11-21 a las 10:00 para Ana Martínez, ana@example.com"
+    assert:
+      - type: not-regex
+        value: "APT_\\d{4}"
+      - type: llm-rubric
+        value: "Explica que no se puede agendar porque solo se atiende de lunes a viernes, sin confirmar ninguna cita."
+
+  - description: "Cita | Hora fuera de horario"
+    vars:
+      mensaje: "Necesito una cita el 2026-11-17 a las 20:00. Soy Roberto Díaz, roberto@example.com"
+    assert:
+      - type: not-regex
+        value: "APT_\\d{4}"
+      - type: llm-rubric
+        value: "Indica que la hora solicitada está fuera del horario de citas y no confirma ninguna cita."
+
+  # ---------- Flujo combinado ----------
+  - description: "Mixto | Pregunta y agenda en el mismo mensaje"
+    vars:
+      mensaje: "¿Cuánto cuesta la consulta? Si está bien, agéndame el 2026-11-19 a las 15:00, soy Sofía López, sofia@example.com"
+    assert:
+      - type: contains
+        value: "Q250"
+      - type: regex
+        value: "APT_\\d{4}"
+      - type: javascript
+        value: |
+          const nombres = (context.providerResponse?.metadata?.herramientas || []).map(h => h.nombre);
+          const ok = nombres.includes('buscar_faq') && nombres.includes('agendar_cita');
+          return { pass: ok, score: ok ? 1 : 0, reason: `Herramientas llamadas: ${nombres.join(', ')}` };
+      - type: latency
+        threshold: 20000
